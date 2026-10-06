@@ -34,7 +34,10 @@ def load_questions() -> list[dict]:
 
 
 def is_hit(hit, q: dict) -> bool:
-    return hit.source == q["source"] and q["must_contain"] in hit.text
+    """A chunk is correct if it contains ANY accepted gold answer: the primary one, or an
+    alternative listed under "alt" (used when the corpus genuinely answers a question in two places)."""
+    golds = [(q["source"], q["must_contain"])] + [tuple(a) for a in q.get("alt", [])]
+    return any(hit.source == src and text in hit.text for src, text in golds)
 
 
 def best_threshold(pos: list[float], neg: list[float]) -> tuple[float, float]:
@@ -61,7 +64,9 @@ def run(embedder: Embedder, client, max_chars: int, k: int, questions: list[dict
             continue
         rank = next((i for i, h in enumerate(hits, 1) if is_hit(h, q)), None)
         pos_scores.append(hits[0].score)
-        rows.append({"id": q["id"], "lang": q["lang"], "rank": rank, "question": q["question"]})
+        rows.append({"id": q["id"], "lang": q["lang"], "rank": rank, "question": q["question"],
+                     "gold": q["source"], "top1_source": hits[0].source, "top1_text": hits[0].text,
+                     "top1_score": hits[0].score})
 
     def metrics(subset):
         n = len(subset) or 1
@@ -79,6 +84,7 @@ def run(embedder: Embedder, client, max_chars: int, k: int, questions: list[dict
         "en": metrics([r for r in rows if r["lang"] == "en"]),
         "bn": metrics([r for r in rows if r["lang"] == "bn"]),
         "misses": [r for r in rows if not r["rank"]],
+        "not_first": [r for r in rows if r["rank"] != 1],
         "pos_top1": (min(pos_scores), sum(pos_scores) / len(pos_scores)),
         "neg_top1": (max(neg_scores), sum(neg_scores) / len(neg_scores)) if neg_scores else None,
         "threshold": t,
@@ -91,6 +97,8 @@ def main():
     ap.add_argument("--models", nargs="+", default=[config.EMBEDDING_MODEL])
     ap.add_argument("--chunk-sizes", nargs="+", type=int, default=[config.CHUNK_MAX_CHARS])
     ap.add_argument("--k", type=int, default=5)
+    ap.add_argument("--show-misses", action="store_true",
+                    help="print every question whose correct chunk was not ranked first, with the chunk that won")
     args = ap.parse_args()
 
     questions = load_questions()
@@ -107,6 +115,12 @@ def main():
                     m = res[lang]
                     lines.append(f"| {model.split('/')[-1]} | {size} | {lang} | {m['n']} | {m['hit@1']:.2f} | "
                                  f"{m['hit@3']:.2f} | {m[f'hit@{args.k}']:.2f} | {m['mrr']:.2f} |")
+                if args.show_misses:
+                    print(f"\n=== {model} / chunk {size}: questions not answered at rank 1 ===")
+                    for r in res["not_first"]:
+                        snippet = r["top1_text"].replace("\n", " ")[:160]
+                        print(f"{r['id']} rank={r['rank']} top1={r['top1_score']:.3f} want={r['gold']} got={r['top1_source']}\n"
+                              f"   Q: {r['question']}\n   TOP1: {snippet}")
                 neg = res["neg_top1"]
                 notes.append(
                     f"- **{model.split('/')[-1]} / chunk {size}**: answerable top-1 score min/avg = "
