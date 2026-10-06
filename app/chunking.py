@@ -89,11 +89,44 @@ def split_long(body: str, max_chars: int, overlap: int) -> list[str]:
         pieces.append("\n".join(current))
     return pieces
 
+def _split_tables(body: str) -> list[tuple[str, str]]:
+    segments, buf, kind = [], [], "text"
+    for line in body.splitlines():
+        k = "table" if line.strip().startswith("|") else "text"
+        if k != kind and buf:
+            segments.append((kind, "\n".join(buf)))
+            buf = []
+        kind = k
+        buf.append(line)
+    if buf:
+        segments.append((kind, "\n".join(buf)))
+    return segments
+
+
+def table_rows(table: str) -> list[str]:
+    lines = [l.strip() for l in table.splitlines() if l.strip()]
+    if len(lines) < 3 or not re.fullmatch(r"[\s|:\-]+", lines[1]):
+        return [table.strip()]
+
+    def cells(line):
+        return [c.strip() for c in line.strip("|").split("|")]
+
+    header = cells(lines[0])
+    return ["; ".join(f"{h}: {v}" for h, v in zip(header, cells(l))) for l in lines[2:]]
+
 
 def chunk_markdown(source: str, markdown: str, max_chars: int = 600, overlap: int = 100) -> list[Chunk]:
     chunks: list[Chunk] = []
     for heading, body in split_sections(markdown):
-        for piece in split_long(body, max_chars, overlap):
+        pieces = []
+        for kind, content in _split_tables(body):
+            if not content.strip():
+                continue
+            if kind == "table":
+                pieces.extend(table_rows(content))
+            else:
+                pieces.extend(split_long(content.strip(), max_chars, overlap))
+        for piece in pieces:
             text = f"{heading}\n{piece}" if heading else piece
             chunks.append(Chunk(text=text, source=source, heading=heading,
                                 lang=detect_lang(piece), index=len(chunks)))
