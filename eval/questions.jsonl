@@ -1,0 +1,34 @@
+{"id":"q01","lang":"en","question":"How many partner hospitals does CareBridge have in India?","source":"03_hospitals_india.md","must_contain":"22 partner hospitals in India"}
+{"id":"q02","lang":"bn","question":"ভারতে কেয়ারব্রিজের কতগুলো সহযোগী হাসপাতাল আছে?","source":"03_hospitals_india.md","must_contain":"22 partner hospitals in India"}
+{"id":"q03","lang":"en","question":"Where can I get cataract surgery abroad?","source":"02_hospitals_thailand.md","must_contain":"Andaman Eye & Laser Hospital"}
+{"id":"q04","lang":"bn","question":"চোখের চিকিৎসার জন্য বিদেশে কোথায় যেতে পারি?","source":"02_hospitals_thailand.md","must_contain":"Andaman Eye & Laser Hospital"}
+{"id":"q05","lang":"en","question":"Do you have eye specialists in Bangladesh?","source":"05_bangladesh_specialists.md","must_contain":"no partner ophthalmologists"}
+{"id":"q06","lang":"en","question":"Which doctor treats heart problems in Dhaka?","source":"05_bangladesh_specialists.md","must_contain":"Dr. Rahim Chowdhury"}
+{"id":"q07","lang":"bn","question":"ঢাকায় কিডনি বা মূত্রনালীর রোগের ডাক্তার কে?","source":"05_bangladesh_specialists.md","must_contain":"Dr. Tanvir Hossain"}
+{"id":"q08","lang":"en","question":"How do I book an appointment with a doctor?","source":"09_faq_costs_appointments.md","must_contain":"Appointments are booked by phone only"}
+{"id":"q09","lang":"bn","question":"ডাক্তারের অ্যাপয়েন্টমেন্ট কীভাবে নেব?","source":"09_faq_costs_appointments.md","must_contain":"অ্যাপয়েন্টমেন্ট শুধু ফোনে নেওয়া যায়"}
+{"id":"q10","lang":"en","question":"How much will a heart bypass surgery cost abroad?","source":"09_faq_costs_appointments.md","must_contain":"does not quote treatment costs in advance"}
+{"id":"q11","lang":"bn","question":"বিদেশে চিকিৎসায় কত টাকা লাগবে?","source":"09_faq_costs_appointments.md","must_contain":"কেয়ারব্রিজ আগে থেকে চিকিৎসার খরচ জানায় না"}
+{"id":"q12","lang":"en","question":"What is the emergency phone number?","source":"07_emergency_ambulance.md","must_contain":"24/7 emergency line at 09600-555010"}
+{"id":"q13","lang":"bn","question":"জরুরি অ্যাম্বুলেন্স পেতে কোন নম্বরে কল করব?","source":"07_emergency_ambulance.md","must_contain":"২৪ ঘণ্টা জরুরি লাইন ০৯৬০০-৫৫৫০১০"}
+{"id":"q14","lang":"en","question":"How long does an ambulance take to arrive in Dhaka?","source":"07_emergency_ambulance.md","must_contain":"20 to 30 minutes"}
+{"id":"q15","lang":"en","question":"What does the ICU ambulance carry?","source":"07_emergency_ambulance.md","must_contain":"ventilator, cardiac monitor, defibrillator"}
+{"id":"q16","lang":"en","question":"Can an individual sign up for the Community Shield programme?","source":"08_community_shield_program.md","must_contain":"Individuals cannot enrol on their own"}
+{"id":"q17","lang":"bn","question":"কমিউনিটি শিল্ডে ব্যক্তিগতভাবে নিবন্ধন করা যায় কি?","source":"08_community_shield_program.md","must_contain":"ব্যক্তিগতভাবে নিবন্ধন করা যায় না"}
+{"id":"q18","lang":"en","question":"How many layers of protection does the Community Shield have?","source":"08_community_shield_program.md","must_contain":"Eight layers of protection"}
+{"id":"q19","lang":"bn","question":"কমিউনিটি শিল্ডে গুরুতর অসুস্থতায় কী সহায়তা মেলে?","source":"08_community_shield_program.md","must_contain":"গুরুতর অসুস্থতায় নগদ সহায়তা"}
+{"id":"q20","lang":"en","question":"Who is covered under the Community Shield family benefit?","source":"08_community_shield_program.md","must_contain":"spouse and up to 3 children under 18"}
+{"id":"q21","lang":"en","question":"Where in India can I get a liver transplant?","source":"03_hospitals_india.md","must_contain":"Kaveri Transplant Centre, Chennai"}
+{"id":"q22","lang":"en","question":"Is there a hospital with Bengali-speaking staff in India?","source":"03_hospitals_india.md","must_contain":"Bengali-speaking staff are available"}
+{"id":"q23","lang":"en","question":"Which Malaysian hospital offers IVF?","source":"04_hospitals_malaysia_turkey.md","must_contain":"Johor Straits Fertility Centre"}
+{"id":"q24","lang":"en","question":"Are halal meals available at Malaysian partner hospitals?","source":"04_hospitals_malaysia_turkey.md","must_contain":"halal meals"}
+{"id":"q25","lang":"en","question":"Where can I get a bone marrow transplant in Turkey?","source":"04_hospitals_malaysia_turkey.md","must_contain":"Anatolia Transplant Hospital, Ankara"}
+{"id":"q26","lang":"en","question":"How long does the medical visa invitation letter take?","source":"10_travel_visa_support.md","must_contain":"usually takes 2 to 3 working days"}
+{"id":"q27","lang":"en","question":"Will someone meet me at the airport abroad?","source":"10_travel_visa_support.md","must_contain":"meets you at the destination airport"}
+{"id":"q28","lang":"en","question":"Can I get a blood test done at home?","source":"06_home_services.md","must_contain":"A trained phlebotomist visits your home"}
+{"id":"q29","lang":"bn","question":"বাসায় নার্স পাওয়া যায় কি?","source":"06_home_services.md","must_contain":"নিবন্ধিত নার্স পাওয়া যায়"}
+{"id":"q30","lang":"en","question":"Can I get a second opinion without travelling?","source":"09_faq_costs_appointments.md","must_contain":"remote second opinion"}
+{"id":"n01","lang":"en","question":"What is the weather like in Dhaka today?","source":null,"must_contain":null,"expect_no_answer":true}
+{"id":"n02","lang":"en","question":"Who won the last cricket world cup?","source":null,"must_contain":null,"expect_no_answer":true}
+{"id":"n03","lang":"bn","question":"আজকের ডলারের দাম কত?","source":null,"must_contain":null,"expect_no_answer":true}
+{"id":"n04","lang":"en","question":"Write me a Python script to sort a list.","source":null,"must_contain":null,"expect_no_answer":true}
