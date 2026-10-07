@@ -28,6 +28,12 @@
 {"id": "q28", "lang": "en", "question": "Can I get a blood test done at home?", "source": "06_home_services.md", "must_contain": "A trained phlebotomist visits your home"}
 {"id": "q29", "lang": "bn", "question": "বাসায় নার্স পাওয়া যায় কি?", "source": "06_home_services.md", "must_contain": "নিবন্ধিত নার্স পাওয়া যায়"}
 {"id": "q30", "lang": "en", "question": "Can I get a second opinion without travelling?", "source": "09_faq_costs_appointments.md", "must_contain": "remote second opinion"}
+{"id":"q31","lang":"en","question":"tell me about your services","source":"01_company_overview.md","must_contain":"What CareBridge does"}
+{"id":"q32","lang":"en","question":"What do you do?","source":"01_company_overview.md","must_contain":"What CareBridge does"}
+{"id":"q33","lang":"bn","question":"আপনারা কী কী সেবা দেন?","source":"01_company_overview.md","must_contain":"কেয়ারব্রিজ যেসব সেবা দেয়"}
+{"id":"q34","lang":"en","question":"Where is your office?","source":"01_company_overview.md","must_contain":"Lake View Tower, Level 5, Road 12, Dhanmondi, Dhaka 1209","alt":[["11_office_location_hours.md","Lake View Tower, Level 5, Road 12, Dhanmondi, Dhaka 1209"]]}
+{"id":"q35","lang":"en","question":"What are your office hours?","source":"01_company_overview.md","must_contain":"Saturday to Thursday, 9:00 AM to 8:00 PM","alt":[["11_office_location_hours.md","Saturday to Thursday, 9:00 AM to 8:00 PM"]]}
+{"id":"q36","lang":"bn","question":"আপনাদের অফিস কোথায়?","source":"01_company_overview.md","must_contain":"লেক ভিউ টাওয়ার, লেভেল ৫, রোড ১২, ধানমন্ডি, ঢাকা ১২০৯","alt":[["11_office_location_hours.md","লেক ভিউ টাওয়ার, লেভেল ৫, রোড ১২, ধানমন্ডি, ঢাকা ১২০৯"]]}
 {"id": "n01", "lang": "en", "question": "What is the weather like in Dhaka today?", "source": null, "must_contain": null, "expect_no_answer": true}
 {"id": "n02", "lang": "en", "question": "Who won the last cricket world cup?", "source": null, "must_contain": null, "expect_no_answer": true}
 {"id": "n03", "lang": "bn", "question": "আজকের ডলারের দাম কত?", "source": null, "must_contain": null, "expect_no_answer": true}

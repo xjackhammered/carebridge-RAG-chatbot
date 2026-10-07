@@ -7,11 +7,19 @@ from app.prompts import NO_ANSWER, build_messages
 from app.retriever import Hit, Retriever
 
 
+def clean_answer(text: str) -> str:
+    """LLMs sometimes emit look-alike Unicode: non-breaking hyphens (breaks phone numbers)
+    and full-width brackets (breaks citation format). Normalise them."""
+    for bad, good in {"\u2011": "-", "\u2010": "-", "【": "[", "】": "]"}.items():
+        text = text.replace(bad, good)
+    return text
+
+
 @dataclass
 class RagResult:
     answer: str
     sources: list[Hit]
-    grounded: bool          # False -> we refused / could not answer from the documents
+    grounded: bool          
     model: str | None
     top_score: float | None
 
@@ -25,17 +33,18 @@ class RagPipeline:
     def answer(self, question: str, history: list[dict]) -> RagResult:
         hits = self.retriever.search(question, self.top_k)
         top = hits[0].score if hits else None
+        lang = detect_lang(question)
 
-        # GATE: if even the best chunk is weakly related, skip the LLM entirely.
-        # This is the main anti-hallucination mechanism: the model can't make
-        # something up about a topic it was never given context for. It also
-        # saves an API call.
         if not hits or top < self.min_score:
-            return RagResult(NO_ANSWER[detect_lang(question)], [], False, "gate", top)
+            return RagResult(NO_ANSWER[lang], [], False, "gate", top)
 
         if self.llm is None:
             raise LLMUnavailable("GROQ_API_KEY is not configured")
 
         messages = build_messages(question, hits, history)
         text, model = self.llm.complete(messages, self.max_tokens)
+        text = clean_answer(text)
+
+        if NO_ANSWER[lang] in text:
+            return RagResult(text, [], False, model, top)
         return RagResult(text, hits, True, model, top)
