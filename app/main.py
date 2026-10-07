@@ -1,10 +1,13 @@
 """FastAPI service.   Run:  uvicorn app.main:app --reload"""
 import logging
 import time
+from collections import deque
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import chromadb
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from app import config
@@ -45,6 +48,7 @@ async def lifespan(app: FastAPI):
     app.state.collection = collection
     app.state.pipeline = RagPipeline(retriever, llm, config.TOP_K, config.MIN_SCORE, config.LLM_MAX_TOKENS)
     app.state.sessions = {}  # session_id -> {"t": last_used, "history": [...]}
+    app.state.rate = {}      # client ip -> deque of recent request timestamps
     yield
 
 
@@ -94,7 +98,37 @@ def _get_session(sessions: dict, sid: str) -> dict:
     return sess
 
 
+def _client_ip(request: Request) -> str:
+    """Behind nginx the real client IP arrives in X-Forwarded-For."""
+    fwd = request.headers.get("x-forwarded-for")
+    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "unknown")
+
+
+def _rate_limited(rate: dict, ip: str) -> bool:
+    """Sliding window: at most RATE_LIMIT_PER_MIN /chat calls per IP per 60s.
+    Protects the (free, quota-limited) LLM key from being burned by one visitor."""
+    now = time.time()
+    if len(rate) > 2000:  # keep memory bounded
+        for k in [k for k, w in rate.items() if not w or now - w[-1] > 60]:
+            del rate[k]
+    window = rate.setdefault(ip, deque())
+    while window and now - window[0] > 60:
+        window.popleft()
+    if len(window) >= config.RATE_LIMIT_PER_MIN:
+        return True
+    window.append(now)
+    return False
+
+
 # ---------- routes ----------
+STATIC_DIR = Path(__file__).parent / "static"
+
+
+@app.get("/", include_in_schema=False)
+def index():
+    return FileResponse(STATIC_DIR / "index.html")
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "chunks": app.state.collection.count(),
@@ -109,7 +143,10 @@ def search(req: SearchRequest):
 
 
 @app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest):
+def chat(req: ChatRequest, request: Request):
+    if _rate_limited(app.state.rate, _client_ip(request)):
+        raise HTTPException(status_code=429, detail="Too many requests. Please wait a minute and try again.",
+                            headers={"Retry-After": "60"})
     sess = _get_session(app.state.sessions, req.session_id)
     try:
         result = app.state.pipeline.answer(req.message, sess["history"])

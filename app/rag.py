@@ -5,14 +5,13 @@ from app.chunking import detect_lang
 from app.llm import LLM, LLMUnavailable
 from app.prompts import NO_ANSWER, build_messages
 from app.retriever import Hit, Retriever
+import re
 
 
 def clean_answer(text: str) -> str:
-    """LLMs sometimes emit look-alike Unicode: non-breaking hyphens (breaks phone numbers)
-    and full-width brackets (breaks citation format). Normalise them."""
     for bad, good in {"\u2011": "-", "\u2010": "-", "【": "[", "】": "]"}.items():
         text = text.replace(bad, good)
-    return text
+    return re.sub(r"\[(\d+)†[^\]]*\]", r"[\1]", text)
 
 
 @dataclass

@@ -1,3 +1,9 @@
+"""All settings live here, read from environment variables (or a .env file).
+
+Why: models get deprecated (your Groq models did!), thresholds get tuned, paths
+differ between your laptop and the VPS. If these are hardcoded across files, every
+change is a code edit. In one place + env vars, it's a config change.
+"""
 import os
 from dotenv import load_dotenv
 
@@ -32,3 +38,6 @@ LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "600"))
 SESSION_TTL_SECONDS = int(os.getenv("SESSION_TTL_SECONDS", "1800"))
 MAX_SESSIONS = int(os.getenv("MAX_SESSIONS", "500"))
 HISTORY_TURNS = int(os.getenv("HISTORY_TURNS", "6"))  # messages kept per session
+
+# --- Abuse protection (per client IP, /chat only) ---
+RATE_LIMIT_PER_MIN = int(os.getenv("RATE_LIMIT_PER_MIN", "10"))
