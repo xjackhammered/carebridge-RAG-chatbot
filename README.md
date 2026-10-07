@@ -1,5 +1,7 @@
 # CareBridge RAG Assistant
 
+Initial release
+
 A bilingual (Bangla / English) retrieval-augmented generation service. It answers questions about a
 fictional healthcare-facilitation company using only retrieved documents, cites its sources, and refuses
 to answer when retrieval is weak.
